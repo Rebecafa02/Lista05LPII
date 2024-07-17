@@ -41,8 +41,17 @@ public class Q03ContatoTelefonicoUtil {
         int categoria = scanner.nextInt();
         scanner.nextLine();
 
-        agendaTelefonica.add(new Q03ContatoTelefonico(nome, sobrenome, email,
-                codigo, telefone, categoria));
+        for(Q03ContatoTelefonico contato: agendaTelefonica){
+            if(contato.getNome().equalsIgnoreCase(nome) &&
+                    contato.getSobrenome().equalsIgnoreCase(sobrenome) &&
+                    contato.getCodigoPais() == codigo &&
+                    contato.getTelefone().equalsIgnoreCase(telefone)) {
+                    System.out.println("Contato já cadastrado na agenda!");
+            } else{
+                agendaTelefonica.add(new Q03ContatoTelefonico(nome, sobrenome, email,
+                        codigo, telefone, categoria));
+            }
+        }
     }
 
     public static void listarPorPais(){
