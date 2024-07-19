@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,9 +17,9 @@ public class Q03ContatoTelefonicoUtil {
             scanner.nextLine();
 
             switch (op) {
-                case 1: inserir();
-                case 2: listarPorPais();
-                case 3: percentualPorCategoria();
+                case 1: inserir(); break;
+                case 2: listarPorPais(); break;
+                case 3: percentualPorCategoria(); break;
             }
 
         } while (op != 4);
@@ -40,18 +41,9 @@ public class Q03ContatoTelefonicoUtil {
                 " 2 - Outros:");
         int categoria = scanner.nextInt();
         scanner.nextLine();
-
-        for(Q03ContatoTelefonico contato: agendaTelefonica){
-            if(contato.getNome().equalsIgnoreCase(nome) &&
-                    contato.getSobrenome().equalsIgnoreCase(sobrenome) &&
-                    contato.getCodigoPais() == codigo &&
-                    contato.getTelefone().equalsIgnoreCase(telefone)) {
-                    System.out.println("Contato já cadastrado na agenda!");
-            } else{
-                agendaTelefonica.add(new Q03ContatoTelefonico(nome, sobrenome, email,
+        agendaTelefonica.add(new Q03ContatoTelefonico(nome, sobrenome, email,
                         codigo, telefone, categoria));
-            }
-        }
+
     }
 
     public static void listarPorPais(){
@@ -59,31 +51,38 @@ public class Q03ContatoTelefonicoUtil {
         int codigo = scanner.nextInt();
         scanner.nextLine();
 
-        for(Q03ContatoTelefonico contato : agendaTelefonica){
+        Iterator<Q03ContatoTelefonico> it = agendaTelefonica.iterator();
+        while(it.hasNext()){
+            Q03ContatoTelefonico contato = it.next();
             if(contato.getCodigoPais() == codigo){
-                System.out.println(contato);
+                System.out.println(contato.toString());
             }
         }
     }
 
     public static void percentualPorCategoria(){
-        int f = 0;
-        int p = 0;
-        int o = 0;
+        if(agendaTelefonica.isEmpty()){
+            System.out.println("Sem contatos cadastrados!");
+        } else {
+            int f = 0;
+            int p = 0;
+            int o = 0;
 
-        for(Q03ContatoTelefonico contato : agendaTelefonica){
-            switch (contato.getCategoria()){
-                case 0: f++;
-                case 1: p++;
-                case 2: o++;
+            Iterator<Q03ContatoTelefonico> it = agendaTelefonica.iterator();
+            while(it.hasNext()){
+                Q03ContatoTelefonico contato = it.next();
+                switch (contato.getCategoria()){
+                    case 0: f++; break;
+                    case 1: p++; break;
+                    case 2: o++; break;
+                }
             }
+            int total = agendaTelefonica.size();
+            System.out.println("Percentual por categoria: ");
+            System.out.println("Contatos Familiares: " + (f/total)*100 );
+            System.out.println("Contatos Profissionais: " + (p/total)*100 );
+            System.out.println("Outros Contatos: " + (o/total)*100 );
         }
-        int total = f + p + o;
-        System.out.println("Percentual por categoria: ");
-        System.out.println("Contatos Familiares: " + (f/total)*100 );
-        System.out.println("Contatos Profissionais: " + (p/total)*100 );
-        System.out.println("Outros Contatos: " + (o/total)*100 );
-
     }
 
     public static void menu(){

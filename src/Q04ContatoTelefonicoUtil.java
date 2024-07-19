@@ -14,14 +14,13 @@ public class Q04ContatoTelefonicoUtil {
             scanner.nextLine();
 
             switch (op) {
-                case 1: inserir();
-                case 2: listarPorPais();
-                case 3: percentualPorCategoria();
+                case 1: inserir(); break;
+                case 2: listarPorPais(); break;
+                case 3: percentualPorCategoria(); break;
             }
 
         } while (op != 4);
     }
-
     public static void inserir(){
         System.out.println("Digite o nome do contato: ");
         String nome = scanner.nextLine();
@@ -38,17 +37,9 @@ public class Q04ContatoTelefonicoUtil {
                 " 2 - Outros:");
         int categoria = scanner.nextInt();
         scanner.nextLine();
+        agendaTelefonica.add(new Q04ContatoTelefonico(nome, sobrenome, email,
+                codigo, telefone, categoria));
 
-         Q04ContatoTelefonico novoContato = new Q04ContatoTelefonico(nome, sobrenome, email,
-                codigo, telefone, categoria);
-
-        for(Q04ContatoTelefonico contato: agendaTelefonica){
-            if(contato.equals(novoContato)){
-                System.out.println("Contato já cadastrado na agenda!");
-            } else{
-                agendaTelefonica.add(novoContato);
-            }
-        }
     }
 
     public static void listarPorPais(){
@@ -56,31 +47,38 @@ public class Q04ContatoTelefonicoUtil {
         int codigo = scanner.nextInt();
         scanner.nextLine();
 
-        for(Q04ContatoTelefonico contato : agendaTelefonica){
+        Iterator<Q04ContatoTelefonico> it = agendaTelefonica.iterator();
+        while(it.hasNext()){
+            Q04ContatoTelefonico contato = it.next();
             if(contato.getCodigoPais() == codigo){
-                System.out.println(contato);
+                System.out.println(contato.toString());
             }
         }
     }
 
     public static void percentualPorCategoria(){
-        int f = 0;
-        int p = 0;
-        int o = 0;
+        if(agendaTelefonica.isEmpty()){
+            System.out.println("Sem contatos cadastrados!");
+        } else {
+            int f = 0;
+            int p = 0;
+            int o = 0;
 
-        for(Q04ContatoTelefonico contato : agendaTelefonica){
-            switch (contato.getCategoria()){
-                case 0: f++;
-                case 1: p++;
-                case 2: o++;
+            Iterator<Q04ContatoTelefonico> it = agendaTelefonica.iterator();
+            while(it.hasNext()){
+                Q04ContatoTelefonico contato = it.next();
+                switch (contato.getCategoria()){
+                    case 0: f++; break;
+                    case 1: p++; break;
+                    case 2: o++; break;
+                }
             }
+            int total = agendaTelefonica.size();
+            System.out.println("Percentual por categoria: ");
+            System.out.println("Contatos Familiares: " + (f/total)*100 );
+            System.out.println("Contatos Profissionais: " + (p/total)*100 );
+            System.out.println("Outros Contatos: " + (o/total)*100 );
         }
-        int total = f + p + o;
-        System.out.println("Percentual por categoria: ");
-        System.out.println("Contatos Familiares: " + (f/total)*100 );
-        System.out.println("Contatos Profissionais: " + (p/total)*100 );
-        System.out.println("Outros Contatos: " + (o/total)*100 );
-
     }
 
     public static void menu(){
@@ -90,5 +88,4 @@ public class Q04ContatoTelefonicoUtil {
         System.out.println("3- Porcentagem de contatos por categoria");
         System.out.println("4- Encerrar programa");
     }
-
 }
